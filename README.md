@@ -7,7 +7,7 @@ This has no effect on your wallpaper: I recommend setting a black wallpaper usin
 
 In grayscale mode, backend is always `glx`.
 
-![](screenshot.png)
+![](res/asset/media/img/screenshot.png)
 
 ## Usage
 
@@ -17,13 +17,12 @@ Any running compton instances are killed, therefore this script can be used to s
 
 Enable grayscale mode
 
-```
-MODE=grayscale compton.sh
+```sh
+./compton.sh --mode "grayscale" --config ~/.config/compton.conf
 ```
 
 Disable grayscale mode
 
+```sh
+./compton.sh
 ```
-MODE=normal compton.sh
-```
-

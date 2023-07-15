@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
- #Define shader
 GRAYSCALE=$(cat <<-END
 uniform sampler2D tex;
 
@@ -14,11 +13,36 @@ void main() {
 END
 )
 
+MODE="normal"  # Default mode
+
+# Parse arguments for --mode
+while (( "$#" )); do
+  case "$1" in
+    --mode)
+
+      # This "if" statement checks if a second argument exists (`-n "$2"`) and
+      # if the second argument does not start with '-' (`[ ${2:0:1} != "-" ]`),
+      # then it performs the following command. This is to ensure a value is
+      # supplied for `--mode`
+      if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+        MODE=$2
+        shift 2
+      else
+        echo "Error: Argument for $1 is missing" >&2
+        exit 1
+      fi
+      ;;
+    *) # unrecognized flags or preserve positional arguments
+      PARAMS="$PARAMS $1"
+      shift
+      ;;
+  esac
+done
+
 # Restart compton with the selected mode
 killall -q compton
 if [[ $MODE == "grayscale" ]]; then
-   compton "$@" --glx-fshader-win "$GRAYSCALE" --backend glx
+   compton $PARAMS --glx-fshader-win "$GRAYSCALE" --backend glx
 else
-   compton "$@"
+   compton $PARAMS
 fi
-
